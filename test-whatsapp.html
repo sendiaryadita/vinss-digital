@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test WhatsApp Order</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0b0b10] text-gray-100 p-8">
+
+<div class="max-w-2xl mx-auto">
+  <h1 class="text-4xl font-bold mb-8">🧪 Test WhatsApp Order Function</h1>
+
+  <div class="bg-[#141418] p-6 rounded-xl border border-purple-500/40 mb-6">
+    <h2 class="text-2xl font-bold mb-4">Test Config</h2>
+    <p id="configStatus" class="text-gray-400 mb-4">Checking configuration...</p>
+  </div>
+
+  <div class="bg-[#141418] p-6 rounded-xl border border-blue-500/40 mb-6">
+    <h2 class="text-2xl font-bold mb-4">Test Order Button</h2>
+    <button id="testOrderBtn" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded font-semibold">
+      Klik: Test Order via WhatsApp
+    </button>
+    <p id="testStatus" class="text-gray-400 mt-4">Status: Siap ditest</p>
+  </div>
+
+  <div class="bg-[#141418] p-6 rounded-xl border border-green-500/40 mb-6">
+    <h2 class="text-2xl font-bold mb-4">Debug Console</h2>
+    <pre id="debugLog" class="text-xs text-green-400 bg-black p-4 rounded overflow-auto h-40">
+Logging messages here...
+    </pre>
+  </div>
+
+  <template id="fmt-test">Format Order Test:
+Nama: John Doe
+Layanan: TEST SERVICE
+Paket: 1 Bulan
+Email/No HP: 08123456789
+Catatan: Testing</template>
+</div>
+
+<script>
+// Configuration
+const WA_NUMBER = '6285758131482';
+
+// Debug log function
+const debugLog = document.getElementById('debugLog');
+function log(msg) {
+  const time = new Date().toLocaleTimeString();
+  console.log(`[${time}] ${msg}`);
+  debugLog.textContent += `\n[${time}] ${msg}`;
+  debugLog.scrollTop = debugLog.scrollHeight;
+}
+
+// Utility functions
+function getTemplateText(id){
+  log(`Getting template: ${id}`);
+  const t = document.getElementById(id);
+  if (!t) {
+    log(`ERROR: Template ${id} not found!`);
+    return '';
+  }
+  const txt = t.textContent.trim();
+  log(`Template content: ${txt.substring(0, 50)}...`);
+  return txt;
+}
+
+function showToast(msg){
+  log(`TOAST: ${msg}`);
+  alert(msg);
+}
+
+// Order function
+function orderViaWA(templateId){
+  log(`=== ORDER VIA WA START ===`);
+  log(`Template ID: ${templateId}`);
+  
+  // Check WA_NUMBER
+  if(!WA_NUMBER){
+    log(`ERROR: WA_NUMBER not configured!`);
+    showToast('Nomor WhatsApp belum dikonfigurasi');
+    return;
+  }
+  log(`✓ WA_NUMBER found: ${WA_NUMBER}`);
+
+  // Get template
+  const txt = getTemplateText(templateId);
+  if(!txt){
+    log(`ERROR: Template text is empty!`);
+    showToast('Format template tidak ditemukan');
+    return;
+  }
+  log(`✓ Template text obtained (length: ${txt.length})`);
+
+  // Process phone number
+  const phone = WA_NUMBER.replace(/\D/g,'');
+  log(`Phone after cleanup: ${phone}`);
+  
+  const ok = /^[1-9]\d{7,15}$/.test(phone);
+  log(`Phone validation: ${ok ? 'PASS' : 'FAIL'}`);
+  
+  if(!ok){ 
+    log(`ERROR: Invalid phone format!`);
+    showToast('Nomor WA belum valid'); 
+    return; 
+  }
+
+  // Build URLs
+  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+  log(`Device type: ${isMobile ? 'MOBILE' : 'DESKTOP'}`);
+  
+  const waWeb = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(txt);
+  const waApp = 'whatsapp://send?phone=' + phone + '&text=' + encodeURIComponent(txt);
+  
+  log(`Web URL: ${waWeb.substring(0, 50)}...`);
+  log(`App URL: ${waApp.substring(0, 50)}...`);
+
+  const href = isMobile ? waApp : waWeb;
+  log(`Using URL: ${href.substring(0, 50)}...`);
+
+  // Open WhatsApp
+  try {
+    log(`Attempting to open: ${href.substring(0, 50)}...`);
+    const win = window.open(href, '_blank');
+    if(!win){ 
+      log(`Window.open blocked, using fallback`);
+      window.location.href = waWeb; 
+    } else {
+      log(`✓ Window opened successfully`);
+    }
+  } catch(e) {
+    log(`CATCH ERROR: ${e.message}`);
+    window.location.href = waWeb;
+  }
+  log(`=== ORDER VIA WA END ===`);
+}
+
+// Setup config status
+window.addEventListener('load', () => {
+  log(`Page loaded`);
+  log(`WA_NUMBER: ${WA_NUMBER}`);
+  
+  const configStatus = document.getElementById('configStatus');
+  if (WA_NUMBER) {
+    configStatus.innerHTML = `✓ WA_NUMBER configured: <strong>${WA_NUMBER}</strong>`;
+    configStatus.className = 'text-green-400 mb-4';
+  } else {
+    configStatus.innerHTML = `✗ WA_NUMBER NOT configured`;
+    configStatus.className = 'text-red-400 mb-4';
+  }
+});
+
+// Test button
+document.getElementById('testOrderBtn').addEventListener('click', () => {
+  log(`Test button clicked`);
+  orderViaWA('fmt-test');
+});
+
+</script>
+
+</body>
+</html>
