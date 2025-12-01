@@ -1,0 +1,98 @@
+🧪 DEBUG WHATSAPP ORDER ISSUE
+
+═══════════════════════════════════════════════════════════════
+
+📋 APA YANG PERLU DITEST:
+
+1. **Test File Khusus WhatsApp** (RECOMMENDED)
+   Buka: test-whatsapp.html
+   
+   File ini akan:
+   - Menampilkan configuration status
+   - Memiliki button test untuk order
+   - Menampilkan debug log secara real-time
+   - Menunjukkan exactly dimana error terjadi
+
+2. **Cara menggunakan test file:**
+   - Double-click: test-whatsapp.html
+   - Baca configuration status di atas
+   - Klik tombol "Test Order via WhatsApp"
+   - Lihat debug console untuk log messages
+   - Setiap step akan ditampilkan
+
+═══════════════════════════════════════════════════════════════
+
+🔍 YANG AKAN DICEK:
+
+✓ WA_NUMBER configuration
+✓ Template text retrieval
+✓ Phone number validation
+✓ URL construction (Web & App)
+✓ Window.open success/failure
+✓ Error messages
+
+═══════════════════════════════════════════════════════════════
+
+📝 KEMUNGKINAN MASALAH:
+
+1. **WA_NUMBER tidak dikonfigurasi**
+   → Debug log akan menunjukkan "ERROR: WA_NUMBER not configured"
+   → Solusi: Pastikan WA_NUMBER terdefinisi di script
+
+2. **Template tidak ditemukan**
+   → Debug log akan menunjukkan "ERROR: Template not found"
+   → Solusi: Pastikan template id benar (fmt-canva, fmt-netflix, dll)
+
+3. **Phone number format salah**
+   → Debug log akan menunjukkan "Phone validation: FAIL"
+   → Solusi: Format harus berupa angka saja tanpa + atau -
+
+4. **Window.open diblokir browser**
+   → Debug log akan menunjukkan "Window.open blocked, using fallback"
+   → Ini normal jika pop-up blocker aktif, fallback akan digunakan
+
+5. **Nomor WhatsApp salah**
+   → Debug log akan menunjukkan nomor yang digunakan
+   → Pastikan nomor benar dengan format: 62XXXXXXXXXX
+
+═══════════════════════════════════════════════════════════════
+
+🚀 LANGKAH DEBUGGING:
+
+1. Buka test-whatsapp.html
+2. Amati "Test Config" section di atas
+3. Jika ada error, lihat debug console
+4. Catat error message
+5. Share error message untuk bantuan lebih lanjut
+
+═══════════════════════════════════════════════════════════════
+
+📞 QUICK FIX CHECKLIST:
+
+□ WA_NUMBER sudah benar di file utama?
+  Cek: website_jualan_multilayanan.html
+  Cari: const WA_NUMBER = '6285758131482';
+
+□ Format template sudah ada?
+  Cek: Apakah <template id="fmt-xxx"> ada?
+  Semua layanan: fmt-canva, fmt-netflix, fmt-youtube, dll
+
+□ Button sudah punya data-order attribute?
+  Cek: <button data-order="fmt-xxx">
+
+□ Script sudah di-refresh di browser?
+  Coba: Tekan Ctrl+R atau F5
+
+□ Clear browser cache?
+  Coba: Ctrl+Shift+Delete
+
+═══════════════════════════════════════════════════════════════
+
+💡 TIPS:
+
+- Buka DevTools (F12) saat test
+- Lihat tab "Console" untuk error messages
+- Buka DevTools sebelum klik button untuk catch semua logs
+- Screenshot console error jika ada issue
+
+═══════════════════════════════════════════════════════════════

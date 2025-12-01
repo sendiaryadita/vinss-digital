@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testing - Vinss Digital</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0b0b10] text-gray-100 p-8">
+
+<div class="max-w-2xl mx-auto">
+  <h1 class="text-4xl font-bold mb-8">🧪 Test Vinss Digital</h1>
+
+  <div id="mainTest" class="bg-[#141418] p-6 rounded-xl border border-purple-500/40 mb-6">
+    <h2 class="text-2xl font-bold mb-4">Test 1: Navigation</h2>
+    <p class="text-gray-400 mb-4">Klik tombol dibawah untuk test navigasi antar halaman</p>
+    
+    <div class="flex gap-4">
+      <button id="showCanva" class="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded font-semibold">
+        Buka Canva
+      </button>
+      <button id="showYoutube" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded font-semibold">
+        Buka YouTube
+      </button>
+    </div>
+  </div>
+
+  <div id="canvaTest" class="hidden bg-[#141418] p-6 rounded-xl border border-purple-500/40 mb-6">
+    <h2 class="text-2xl font-bold mb-4 text-purple-400">📺 Halaman Canva</h2>
+    <p class="text-gray-400 mb-4">Anda sudah berhasil membuka halaman Canva. Test: Navigation OK ✓</p>
+    <button id="backFromCanva" class="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded font-semibold">
+      Kembali
+    </button>
+  </div>
+
+  <div id="youtubeTest" class="hidden bg-[#141418] p-6 rounded-xl border border-red-500/40 mb-6">
+    <h2 class="text-2xl font-bold mb-4 text-red-400">🎥 Halaman YouTube</h2>
+    <p class="text-gray-400 mb-4">Anda sudah berhasil membuka halaman YouTube. Test: Navigation OK ✓</p>
+    <button id="backFromYoutube" class="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded font-semibold">
+      Kembali
+    </button>
+  </div>
+
+  <div class="bg-[#141418] p-6 rounded-xl border border-green-500/40 mb-6">
+    <h2 class="text-2xl font-bold mb-4">Test 2: Copy Function</h2>
+    <p class="text-gray-400 mb-4">Klik Copy untuk test fungsi copy format</p>
+    <button id="testCopy" class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded font-semibold">
+      Copy Format Test
+    </button>
+  </div>
+
+  <div id="testStatus" class="bg-[#141418] p-6 rounded-xl border border-blue-500/40">
+    <h3 class="text-xl font-bold mb-2">📊 Status Tests</h3>
+    <p id="status1" class="text-gray-400 mb-2">Navigation: <span class="text-yellow-400">⏳ Belum ditest</span></p>
+    <p id="status2" class="text-gray-400">Copy Function: <span class="text-yellow-400">⏳ Belum ditest</span></p>
+  </div>
+</div>
+
+<script>
+console.log("=== Test Script Loaded ===");
+
+// Elements
+const mainTest = document.getElementById('mainTest');
+const canvaTest = document.getElementById('canvaTest');
+const youtubeTest = document.getElementById('youtubeTest');
+const showCanva = document.getElementById('showCanva');
+const showYoutube = document.getElementById('showYoutube');
+const backFromCanva = document.getElementById('backFromCanva');
+const backFromYoutube = document.getElementById('backFromYoutube');
+const testCopy = document.getElementById('testCopy');
+const status1 = document.getElementById('status1');
+const status2 = document.getElementById('status2');
+
+// Toast function
+function showToast(msg){
+  alert(msg);
+}
+
+// Navigation tests
+showCanva.addEventListener('click', () => {
+  console.log("Canva button clicked");
+  mainTest.classList.add('hidden');
+  canvaTest.classList.remove('hidden');
+  status1.innerHTML = 'Navigation: <span class="text-green-400">✓ OK (Canva opened)</span>';
+});
+
+backFromCanva.addEventListener('click', () => {
+  console.log("Back from Canva clicked");
+  canvaTest.classList.add('hidden');
+  mainTest.classList.remove('hidden');
+});
+
+showYoutube.addEventListener('click', () => {
+  console.log("YouTube button clicked");
+  mainTest.classList.add('hidden');
+  youtubeTest.classList.remove('hidden');
+  status1.innerHTML = 'Navigation: <span class="text-green-400">✓ OK (YouTube opened)</span>';
+});
+
+backFromYoutube.addEventListener('click', () => {
+  console.log("Back from YouTube clicked");
+  youtubeTest.classList.add('hidden');
+  mainTest.classList.remove('hidden');
+});
+
+// Copy test
+testCopy.addEventListener('click', async () => {
+  console.log("Copy button clicked");
+  const testText = "Format Order:\nNama: -\nLayanan: TEST\nPaket: -\nEmail/No HP: -";
+  try {
+    await navigator.clipboard.writeText(testText);
+    console.log("Text copied to clipboard");
+    status2.innerHTML = 'Copy Function: <span class="text-green-400">✓ OK (Copied to clipboard)</span>';
+    showToast('✓ Format berhasil disalin ke clipboard!');
+  } catch(e){
+    console.error("Copy failed:", e);
+    status2.innerHTML = 'Copy Function: <span class="text-red-400">✗ FAILED</span>';
+    showToast('✗ Gagal menyalin format');
+  }
+});
+
+console.log("All event listeners attached");
+console.log("Page ready for testing");
+</script>
+
+</body>
+</html>
