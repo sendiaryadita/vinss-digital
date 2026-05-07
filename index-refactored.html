@@ -1,0 +1,222 @@
+<!-- rebuild pages -->
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vinss Digital</title>
+  <!-- SEO Meta -->
+  <meta name="description" content="Vinss Digital - Layanan digital premium: Canva, Netflix, YouTube, Vidio, Capcut. Cepat, aman, bergaransi." />
+  <meta name="keywords" content="canva pro, netflix premium, youtube premium, vidio premier, capcut premium, akun premium murah, layanan digital" />
+  <meta name="author" content="Sendi Aryadita" />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#7e22ce" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Vinss Digital - Premium • Cepat • Aman • Bergaransi" />
+  <meta property="og:description" content="Jual akun premium: Canva, Netflix, YouTube, Vidio, Capcut. Proses cepat & bergaransi." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Vinss Digital" />
+  <meta property="og:image" content="https://dummyimage.com/1200x630/121217/eaeaea&text=Vinss+Digital" />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Vinss Digital" />
+  <meta name="twitter:description" content="Akun premium murah bergaransi: Canva, Netflix, YouTube, Vidio, Capcut." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html, body { max-width: 100%; overflow-x: hidden; }
+    body { position: relative; }
+  </style>
+</head>
+<body class="bg-[#0b0b10] text-gray-100 pb-24 overflow-x-hidden">
+
+<!-- ================= HALAMAN UTAMA ================= -->
+<div id="mainPage">
+<header class="bg-[#121217]/80 border-b border-gray-800 py-24 md:py-40 shadow-2xl overflow-visible relative" style="background:
+    url('hero-aurora.svg') center/cover no-repeat,
+    radial-gradient(1200px 600px at 50% -10%, rgba(168,85,247,.25), transparent 60%),
+    linear-gradient(#121217,#121217);">
+  <span class="pointer-events-none absolute inset-0 -z-10">
+    <span class="absolute -top-24 left-8 w-[42rem] h-[42rem] rounded-full blur-3xl bg-fuchsia-500/25"></span>
+    <span class="absolute -top-16 right-20 w-[32rem] h-[32rem] rounded-full blur-3xl bg-pink-500/20"></span>
+    <span class="absolute bottom-[-6rem] left-1/2 -translate-x-1/2 w-[50rem] h-[30rem] rounded-full blur-3xl bg-indigo-500/15"></span>
+  </span>
+  <div class="relative w-fit mx-auto">
+    <span class="absolute -inset-x-6 -inset-y-2 rounded-full blur-2xl bg-gradient-to-r from-fuchsia-500/35 via-purple-500/25 to-pink-500/35"></span>
+    <h1 class="relative text-center text-4xl sm:text-5xl md:text-6xl leading-tight pb-2 font-black tracking-[0.02em] bg-gradient-to-r from-fuchsia-400 via-purple-500 to-pink-500 bg-clip-text text-transparent antialiased">Vinss Digital</h1>
+  </div>
+  <p class="text-center text-gray-400 mt-1 text-lg italic">Layanan Digital Premium • Cepat • Aman • Bergaransi</p>
+</header>
+
+<!-- Search bar -->
+<div class="max-w-3xl mx-auto px-6 mt-6">
+  <div class="relative">
+    <input id="searchInput" type="text"
+      placeholder="Cari layanan: canva, netflix, youtube, vidio, capcut..."
+      class="w-full bg-[#121217] border border-gray-800/80 rounded-xl py-3 pl-12 pr-4 text-sm text-gray-200 placeholder-gray-500 outline-none focus:ring-2 focus:ring-fuchsia-500/40 focus:border-fuchsia-500/50">
+    <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/></svg>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto p-6 mt-6 sm:mt-10">
+  <div id="serviceGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+    <!-- Service buttons will be generated dynamically from SERVICES data -->
+  </div>
+</div>
+
+<footer class="text-center py-6 text-gray-600 mt-10 border-t border-gray-800">© 2025 Vinss Digital Premium.</footer>
+</div>
+
+<!-- ================= SERVICE DETAIL PAGE ================= -->
+<div id="serviceDetailPage" class="hidden p-6">
+  <div id="serviceDetailContainer">
+    <!-- Service detail will be generated dynamically -->
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast" class="fixed bottom-8 right-8 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none z-50"></div>
+
+<!-- WhatsApp floating button -->
+<a href="" id="waFloat" class="fixed bottom-8 left-8 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg flex items-center justify-center cursor-pointer z-40" title="Order via WhatsApp" target="_blank" rel="noopener noreferrer">
+  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.935 1.18.979.979 0 00-.434.566 9.923 9.923 0 00-.008 5.44c.136.393.305.755.502 1.088a9.93 9.93 0 004.476 3.833c.377.089.76.127 1.145.118 1.304 0 2.545-.385 3.582-1.13a4 4 0 001.404-1.408 9.975 9.975 0 00.91-3.888c.165-1.281.108-2.546-.169-3.767-.248-1.097-.672-2.12-1.257-3.035a9.89 9.89 0 00-1.615-2.087 9.912 9.912 0 00-3.602-2.148zM20.5 2.5C11.522 2.5 4 10.022 4 19s7.522 16.5 16.5 16.5S37 27.978 37 19 29.478 2.5 20.5 2.5zM12 21a9 9 0 119 9 9 9 0 01-9-9z"/></svg>
+</a>
+
+<!-- All template elements -->
+<!-- These will be used by renderDetailPage() to populate order formats -->
+<!-- [All 41 template elements from backup file will be copied here] -->
+
+<!-- ================= SCRIPT ================= -->
+<script src="services-data.js"></script>
+<script src="render-functions.js"></script>
+
+<script>
+// ====== CONFIG ======
+const WA_NUMBER = '6285758131482';
+
+// ====== STATE & UTILS ======
+const mainPage = document.getElementById('mainPage');
+let CURRENT_SERVICE = 'Beranda';
+
+function getTemplateText(id){
+  const t = document.getElementById(id);
+  if(!t) {
+    console.warn('Template not found:', id);
+    return '';
+  }
+  let text = '';
+  if(t.tagName === 'TEMPLATE') {
+    text = t.innerHTML.trim();
+  } else {
+    text = t.textContent.trim();
+  }
+  return text;
+}
+
+function showToast(msg){
+  const el = document.getElementById('toast');
+  if(!el) return;
+  el.textContent = msg;
+  el.classList.remove('opacity-0');
+  el.classList.add('opacity-100');
+  setTimeout(()=>{ el.classList.add('opacity-0'); el.classList.remove('opacity-100'); }, 1600);
+}
+
+function setWALink(){
+  if(!WA_NUMBER){
+    console.warn('WA_NUMBER tidak dikonfigurasi');
+    return;
+  }
+  const phone = WA_NUMBER.replace(/\D/g,'');
+  const serviceText = CURRENT_SERVICE && CURRENT_SERVICE !== 'Beranda' ? CURRENT_SERVICE : 'layanan digital';
+  const msg = 'Halo admin, saya mau order ' + serviceText + '.';
+  const href = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(msg);
+  const btn = document.getElementById('waFloat');
+  if(btn && phone) btn.setAttribute('href', href);
+}
+
+function orderViaWA(templateId){
+  if(!WA_NUMBER){
+    console.error('WA_NUMBER not configured');
+    showToast('Nomor WhatsApp belum dikonfigurasi');
+    return;
+  }
+
+  const txt = getTemplateText(templateId);
+  if(!txt){
+    showToast('Format template tidak ditemukan');
+    return;
+  }
+
+  const phone = WA_NUMBER.replace(/\D/g,'');
+  const msg = encodeURIComponent(txt);
+  const waLink = 'https://wa.me/' + phone + '?text=' + msg;
+  window.open(waLink, '_blank');
+}
+
+// ====== BIND COPY & ORDER ======
+function bindCopyAndOrder(){
+  const copyBtns = document.querySelectorAll('.copyBtn');
+  copyBtns.forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const id = btn.getAttribute('data-copy');
+      const txt = getTemplateText(id);
+      if(txt){
+        try {
+          await navigator.clipboard.writeText(txt);
+          showToast('Format disalin ke clipboard ✓');
+        } catch(e){
+          console.error('Copy error:', e);
+          showToast('Gagal menyalin format');
+        }
+      }
+    });
+  });
+
+  const orderBtns = document.querySelectorAll('.orderBtn');
+  orderBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.getAttribute('data-order');
+      orderViaWA(id);
+    });
+  });
+}
+
+// ====== BIND SEARCH ======
+function bindSearch(){
+  const searchInput = document.getElementById('searchInput');
+  const serviceGrid = document.getElementById('serviceGrid');
+  if (searchInput && serviceGrid){
+    const cards = Array.from(serviceGrid.children);
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.trim().toLowerCase();
+      cards.forEach(card => {
+        const name = card.innerText.trim().toLowerCase();
+        card.style.display = name.includes(q) ? '' : 'none';
+      });
+    });
+  }
+}
+
+// ====== INIT ======
+function initApp(){
+  if (typeof renderServiceGrid === 'function') {
+    renderServiceGrid();
+    bindCopyAndOrder();
+    bindSearch();
+    setWALink();
+  } else {
+    console.error('renderServiceGrid function not loaded');
+  }
+}
+
+// Run when DOM is ready
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
+</script>
+
+</body>
+</html>

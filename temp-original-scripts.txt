@@ -1,0 +1,486 @@
+<!-- ================= SCRIPT ================= -->
+<script>
+// ====== CONFIG ======
+const WA_NUMBER = '6285758131482'; // Ganti ke nomor WhatsApp admin kamu (format internasional, tanpa +)
+
+// ====== STATE & UTILS ======
+const mainPage = document.getElementById('mainPage');
+let CURRENT_SERVICE = 'Beranda';
+
+function getTemplateText(id){
+  const t = document.getElementById(id);
+  if(!t) {
+    console.warn('Template not found:', id);
+    return '';
+  }
+  
+  // For <template> elements, use .content.textContent or .innerHTML
+  let text = '';
+  if(t.tagName === 'TEMPLATE') {
+    text = t.innerHTML.trim();
+  } else {
+    text = t.textContent.trim();
+  }
+  
+  console.log('Template:', id, 'Length:', text.length);
+  return text;
+}
+
+function showToast(msg){
+  const el = document.getElementById('toast');
+  if(!el) return;
+  el.textContent = msg;
+  el.classList.remove('opacity-0');
+  el.classList.add('opacity-100');
+  setTimeout(()=>{ el.classList.add('opacity-0'); el.classList.remove('opacity-100'); }, 1600);
+}
+
+function setWALink(){
+  if(!WA_NUMBER){
+    console.warn('WA_NUMBER tidak dikonfigurasi');
+    return;
+  }
+  const phone = WA_NUMBER.replace(/\D/g,'');
+  const serviceText = CURRENT_SERVICE && CURRENT_SERVICE !== 'Beranda' ? CURRENT_SERVICE : 'layanan digital';
+  const msg = 'Halo admin, saya mau order ' + serviceText + '.';
+  const href = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(msg);
+  const btn = document.getElementById('waFloat');
+  if(btn && phone) btn.setAttribute('href', href);
+}
+
+function show(page, service){
+  mainPage.classList.add('hidden');
+  page.classList.remove('hidden');
+  if(service){ CURRENT_SERVICE = service; setWALink(); }
+}
+
+function back(page){
+  page.classList.add('hidden');
+  mainPage.classList.remove('hidden');
+  CURRENT_SERVICE = 'Beranda';
+  setWALink();
+}
+
+function orderViaWA(templateId){
+  console.log('=== Order VIA WA START ===');
+  console.log('templateId:', templateId);
+  
+  if(!WA_NUMBER){
+    console.error('WA_NUMBER not configured');
+    showToast('Nomor WhatsApp belum dikonfigurasi');
+    return;
+  }
+  console.log('WA_NUMBER:', WA_NUMBER);
+  
+  const txt   = getTemplateText(templateId);
+  console.log('Template text retrieved, length:', txt.length);
+  
+  if(!txt){
+    console.error('Template text is empty');
+    showToast('Format template tidak ditemukan');
+    return;
+  }
+  
+  const phone = WA_NUMBER.replace(/\D/g,'');
+  console.log('Phone after cleanup:', phone);
+  
+  const ok    = /^[1-9]\d{7,15}$/.test(phone);
+  console.log('Phone validation:', ok);
+  
+  if(!ok){ 
+    console.error('Phone validation failed');
+    showToast('Nomor WA belum valid'); 
+    return; 
+  }
+
+  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+  console.log('Is mobile:', isMobile);
+  
+  const waWeb = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(txt);
+  const waApp = 'whatsapp://send?phone=' + phone + '&text=' + encodeURIComponent(txt);
+  
+  console.log('waWeb URL:', waWeb.substring(0, 80) + '...');
+  console.log('waApp URL:', waApp.substring(0, 80) + '...');
+
+  const href = isMobile ? waApp : waWeb;
+  console.log('Using href:', href.substring(0, 80) + '...');
+  
+  try {
+    console.log('Attempting window.open...');
+    const win  = window.open(href, '_blank');
+    if(!win){ 
+      console.warn('Window.open returned null, using fallback');
+      window.location.href = waWeb; 
+    } else {
+      console.log('Window opened successfully');
+    }
+  } catch(e) {
+    console.error('Exception in window.open:', e.message);
+    console.log('Using fallback');
+    window.location.href = waWeb;
+  }
+  console.log('=== Order VIA WA END ===');
+}
+
+// ====== BIND NAVIGATION BUTTONS ======
+function bindNavigationButtons(){
+  // CANVA
+  const canvaBtn = document.getElementById('canvaBtn');
+  const canvaPage = document.getElementById('canvaPage');
+  const backHome = document.getElementById('backHome');
+  if(canvaBtn && canvaPage) canvaBtn.addEventListener('click', ()=> show(canvaPage,'CANVA PRO'));
+  if(backHome && canvaPage) backHome.addEventListener('click', ()=> back(canvaPage));
+
+  // CAPCUT
+  const capcutBtn = document.getElementById('capcutBtn');
+  const capcutPage = document.getElementById('capcutPage');
+  const backCapcut = document.getElementById('backCapcut');
+  if(capcutBtn && capcutPage) capcutBtn.addEventListener('click', ()=> show(capcutPage,'CAPCUT PREMIUM'));
+  if(backCapcut && capcutPage) backCapcut.addEventListener('click', ()=> back(capcutPage));
+
+  // YOUTUBE
+  const ytBtn = document.getElementById('ytBtn');
+  const ytPage = document.getElementById('ytPage');
+  const backYT = document.getElementById('backYT');
+  if(ytBtn && ytPage) ytBtn.addEventListener('click', ()=> show(ytPage,'YOUTUBE PREMIUM'));
+  if(backYT && ytPage) backYT.addEventListener('click', ()=> back(ytPage));
+
+  // VIDIO
+  const vidioBtn = document.getElementById('vidioBtn');
+  const vidioPage = document.getElementById('vidioPage');
+  const backVidio = document.getElementById('backVidio');
+  if(vidioBtn && vidioPage) vidioBtn.addEventListener('click', ()=> show(vidioPage,'VIDIO PREMIER'));
+  if(backVidio && vidioPage) backVidio.addEventListener('click', ()=> back(vidioPage));
+
+  // NETFLIX
+  const netflixBtn = document.getElementById('netflixBtn');
+  const netflixPage = document.getElementById('netflixPage');
+  const backNetflix = document.getElementById('backNetflix');
+  if(netflixBtn && netflixPage) netflixBtn.addEventListener('click', ()=> show(netflixPage,'NETFLIX PREMIUM'));
+  if(backNetflix && netflixPage) backNetflix.addEventListener('click', ()=> back(netflixPage));
+
+  // GPT
+  const gptBtn = document.getElementById('gptBtn');
+  const gptPage = document.getElementById('gptPage');
+  const backGPT = document.getElementById('backGPT');
+  if(gptBtn && gptPage) gptBtn.addEventListener('click', ()=> show(gptPage,'CHAT GPT'));
+  if(backGPT && gptPage) backGPT.addEventListener('click', ()=> back(gptPage));
+
+  // WETV
+  const wetvBtn = document.getElementById('wetvBtn');
+  const wetvPage = document.getElementById('wetvPage');
+  const backWETV = document.getElementById('backWETV');
+  if(wetvBtn && wetvPage) wetvBtn.addEventListener('click', ()=> show(wetvPage,'WETV PREMIUM'));
+  if(backWETV && wetvPage) backWETV.addEventListener('click', ()=> back(wetvPage));
+
+  // BSTATION
+  const bstationBtn = document.getElementById('bstationBtn');
+  const bstationPage = document.getElementById('bstationPage');
+  const backBstation = document.getElementById('backBstation');
+  if(bstationBtn && bstationPage) bstationBtn.addEventListener('click', ()=> show(bstationPage,'BSTATION PREMIUM'));
+  if(backBstation && bstationPage) backBstation.addEventListener('click', ()=> back(bstationPage));
+
+  // STRAVA
+  const stravaBtn = document.getElementById('stravaBtn');
+  const stravaPage = document.getElementById('stravaPage');
+  const backStrava = document.getElementById('backStrava');
+  if(stravaBtn && stravaPage) stravaBtn.addEventListener('click', ()=> show(stravaPage,'STRAVA PREMIUM'));
+  if(backStrava && stravaPage) backStrava.addEventListener('click', ()=> back(stravaPage));
+  
+  // SPOTIFY
+  const spotifyBtn = document.getElementById('spotifyBtn');
+  const spotifyPage = document.getElementById('spotifyPage');
+  const backSpotify = document.getElementById('backSpotify');
+  if(spotifyBtn && spotifyPage) spotifyBtn.addEventListener('click', ()=> show(spotifyPage,'SPOTIFY PREMIUM'));
+  if(backSpotify && spotifyPage) backSpotify.addEventListener('click', ()=> back(spotifyPage));
+
+  
+  // ZOOM
+  const zoomBtn = document.getElementById('zoomBtn');
+  const zoomPage = document.getElementById('zoomPage');
+  const backZoom = document.getElementById('backZoom');
+  if(zoomBtn && zoomPage) zoomBtn.addEventListener('click', ()=> show(zoomPage,'ZOOM MEETING PRO'));
+  if(backZoom && zoomPage) backZoom.addEventListener('click', ()=> back(zoomPage));
+
+  // VISION+
+  const visionBtn = document.getElementById('visionBtn');
+  const visionPage = document.getElementById('visionPage');
+  const backVision = document.getElementById('backVision');
+  if(visionBtn && visionPage) visionBtn.addEventListener('click', ()=> show(visionPage,'VISION+ PREMIUM'));
+  if(backVision && visionPage) backVision.addEventListener('click', ()=> back(visionPage));
+
+  // HBO MAX
+  const hboBtn = document.getElementById('hboBtn');
+  const hboPage = document.getElementById('hboPage');
+  const backHbo = document.getElementById('backHbo');
+  if(hboBtn && hboPage) hboBtn.addEventListener('click', ()=> show(hboPage,'HBO MAX PREMIUM'));
+  if(backHbo && hboPage) backHbo.addEventListener('click', ()=> back(hboPage));
+
+  // FIZZO
+  const fizzoBtn = document.getElementById('fizzoBtn');
+  const fizzoPage = document.getElementById('fizzoPage');
+  const backFizzo = document.getElementById('backFizzo');
+  if(fizzoBtn && fizzoPage) fizzoBtn.addEventListener('click', ()=> show(fizzoPage,'FIZZO NOVEL'));
+  if(backFizzo && fizzoPage) backFizzo.addEventListener('click', ()=> back(fizzoPage));
+
+  // IQIYI
+  const iqiyiBtn = document.getElementById('iqiyiBtn');
+  const iqiyiPage = document.getElementById('iqiyiPage');
+  const backIqiyi = document.getElementById('backIqiyi');
+  if(iqiyiBtn && iqiyiPage) iqiyiBtn.addEventListener('click', ()=> show(iqiyiPage,'IQIYI PREMIUM'));
+  if(backIqiyi && iqiyiPage) backIqiyi.addEventListener('click', ()=> back(iqiyiPage));
+
+  // LOKLOK
+  const loklokBtn = document.getElementById('loklokBtn');
+  const loklokPage = document.getElementById('loklokPage');
+  const backLoklok = document.getElementById('backLoklok');
+  if(loklokBtn && loklokPage) loklokBtn.addEventListener('click', ()=> show(loklokPage,'LOKLOK PREMIUM'));
+  if(backLoklok && loklokPage) backLoklok.addEventListener('click', ()=> back(loklokPage));
+
+  // APPLE MUSIC
+  const appleBtn = document.getElementById('appleBtn');
+  const applePage = document.getElementById('applePage');
+  const backApple = document.getElementById('backApple');
+  if(appleBtn && applePage) appleBtn.addEventListener('click', ()=> show(applePage,'APPLE MUSIC'));
+  if(backApple && applePage) backApple.addEventListener('click', ()=> back(applePage));
+
+  // AMAZON PRIME
+  const amazonBtn = document.getElementById('amazonBtn');
+  const amazonPage = document.getElementById('amazonPage');
+  const backAmazon = document.getElementById('backAmazon');
+  if(amazonBtn && amazonPage) amazonBtn.addEventListener('click', ()=> show(amazonPage,'AMAZON PRIME'));
+  if(backAmazon && amazonPage) backAmazon.addEventListener('click', ()=> back(amazonPage));
+
+  // IOS APPS
+  const iosBtn = document.getElementById('iosBtn');
+  const iosPage = document.getElementById('iosPage');
+  const backIos = document.getElementById('backIos');
+  if(iosBtn && iosPage) iosBtn.addEventListener('click', ()=> show(iosPage,'IOS APPS'));
+  if(backIos && iosPage) backIos.addEventListener('click', ()=> back(iosPage));
+
+  // CRUNCHYROLL PREMIUM
+  const crunchyBtn = document.getElementById('crunchyBtn');
+  const crunchyPage = document.getElementById('crunchyPage');
+  const backCrunchy = document.getElementById('backCrunchy');
+  if(crunchyBtn && crunchyPage) crunchyBtn.addEventListener('click', ()=> show(crunchyPage,'CRUNCHYROLL PREMIUM'));
+  if(backCrunchy && crunchyPage) backCrunchy.addEventListener('click', ()=> back(crunchyPage));
+
+  // UNBLOCK IMEI
+  const unblockBtn = document.getElementById('unblockBtn');
+  const unblockPage = document.getElementById('unblockPage');
+  const backUnblock = document.getElementById('backUnblock');
+  if(unblockBtn && unblockPage) unblockBtn.addEventListener('click', ()=> show(unblockPage,'UNBLOCK IMEI'));
+  if(backUnblock && unblockPage) backUnblock.addEventListener('click', ()=> back(unblockPage));
+
+  // DRAMAWAVE
+  const dramawaveBtn = document.getElementById('dramawaveBtn');
+  const dramawavePage = document.getElementById('dramawavePage');
+  const backDramawave = document.getElementById('backDramawave');
+  if(dramawaveBtn && dramawavePage) dramawaveBtn.addEventListener('click', ()=> show(dramawavePage,'DRAMAWAVE'));
+  if(backDramawave && dramawavePage) backDramawave.addEventListener('click', ()=> back(dramawavePage));
+
+  // GTC PREMIUM
+  const gtcBtn = document.getElementById('gtcBtn');
+  const gtcPage = document.getElementById('gtcPage');
+  const backGtc = document.getElementById('backGtc');
+  if(gtcBtn && gtcPage) gtcBtn.addEventListener('click', ()=> show(gtcPage,'GET CONTACT PREMIUM'));
+  if(backGtc && gtcPage) backGtc.addEventListener('click', ()=> back(gtcPage));
+
+  // DISNEY+ PREMIUM
+  const disneyBtn = document.getElementById('disneyBtn');
+  const disneyPage = document.getElementById('disneyPage');
+  const backDisney = document.getElementById('backDisney');
+  if(disneyBtn && disneyPage) disneyBtn.addEventListener('click', ()=> show(disneyPage,'DISNEY+ PREMIUM'));
+  if(backDisney && disneyPage) backDisney.addEventListener('click', ()=> back(disneyPage));
+
+  // TUNITIN
+  const tunitinBtn = document.getElementById('tunitinBtn');
+  const tunitinPage = document.getElementById('tunitinPage');
+  const backTunitin = document.getElementById('backTunitin');
+  if(tunitinBtn && tunitinPage) tunitinBtn.addEventListener('click', ()=> show(tunitinPage,'TUNITIN'));
+  if(backTunitin && tunitinPage) backTunitin.addEventListener('click', ()=> back(tunitinPage));
+
+  // PDF PREMIUM
+  const pdfBtn = document.getElementById('pdfBtn');
+  const pdfPage = document.getElementById('pdfPage');
+  const backPdf = document.getElementById('backPdf');
+  if(pdfBtn && pdfPage) pdfBtn.addEventListener('click', ()=> show(pdfPage,'PDF PREMIUM'));
+  if(backPdf && pdfPage) backPdf.addEventListener('click', ()=> back(pdfPage));
+
+  // ALIGHT MOTION
+  const alightBtn = document.getElementById('alightBtn');
+  const alightPage = document.getElementById('alightPage');
+  const backAlight = document.getElementById('backAlight');
+  if(alightBtn && alightPage) alightBtn.addEventListener('click', ()=> show(alightPage,'ALIGHT MOTION'));
+  if(backAlight && alightPage) backAlight.addEventListener('click', ()=> back(alightPage));
+
+  // WINK VIP
+  const winkBtn = document.getElementById('winkBtn');
+  const winkPage = document.getElementById('winkPage');
+  const backWink = document.getElementById('backWink');
+  if(winkBtn && winkPage) winkBtn.addEventListener('click', ()=> show(winkPage,'WINK VIP'));
+  if(backWink && winkPage) backWink.addEventListener('click', ()=> back(winkPage));
+
+  // VIU PREMIUM
+  const viuBtn = document.getElementById('viuBtn');
+  const viuPage = document.getElementById('viuPage');
+  const backViu = document.getElementById('backViu');
+  if(viuBtn && viuPage) viuBtn.addEventListener('click', ()=> show(viuPage,'VIU PREMIUM'));
+  if(backViu && viuPage) backViu.addEventListener('click', ()=> back(viuPage));
+
+  // VPN PRICELIST
+  const vpnBtn = document.getElementById('vpnBtn');
+  const vpnPage = document.getElementById('vpnPage');
+  const backVpn = document.getElementById('backVpn');
+  if(vpnBtn && vpnPage) vpnBtn.addEventListener('click', ()=> show(vpnPage,'VPN PRICELIST'));
+  if(backVpn && vpnPage) backVpn.addEventListener('click', ()=> back(vpnPage));
+
+  // TELEGRAM PREMIUM
+  const telegramBtn = document.getElementById('telegramBtn');
+  const telegramPage = document.getElementById('telegramPage');
+  const backTelegram = document.getElementById('backTelegram');
+  if(telegramBtn && telegramPage) telegramBtn.addEventListener('click', ()=> show(telegramPage,'TELEGRAM PREMIUM'));
+  if(backTelegram && telegramPage) backTelegram.addEventListener('click', ()=> back(telegramPage));
+
+  // TRADING VIEW
+  const tradingBtn = document.getElementById('tradingBtn');
+  const tradingPage = document.getElementById('tradingPage');
+  const backTrading = document.getElementById('backTrading');
+  if(tradingBtn && tradingPage) tradingBtn.addEventListener('click', ()=> show(tradingPage,'TRADING VIEW'));
+  if(backTrading && tradingPage) backTrading.addEventListener('click', ()=> back(tradingPage));
+
+  // WIBUKU PREMIUM
+  const wibukuBtn = document.getElementById('wibukuBtn');
+  const wibukuPage = document.getElementById('wibukuPage');
+  const backWibuku = document.getElementById('backWibuku');
+  if(wibukuBtn && wibukuPage) wibukuBtn.addEventListener('click', ()=> show(wibukuPage,'WIBUKU PREMIUM'));
+  if(backWibuku && wibukuPage) backWibuku.addEventListener('click', ()=> back(wibukuPage));
+
+  // DRAMABOX PREMIUM
+  const dramaboxBtn = document.getElementById('dramaboxBtn');
+  const dramaboxPage = document.getElementById('dramaboxPage');
+  const backDramabox = document.getElementById('backDramabox');
+  if(dramaboxBtn && dramaboxPage) dramaboxBtn.addEventListener('click', ()=> show(dramaboxPage,'DRAMABOX PREMIUM'));
+  if(backDramabox && dramaboxPage) backDramabox.addEventListener('click', ()=> back(dramaboxPage));
+
+  // WINK@ PREMIUM
+  const winkpremBtn = document.getElementById('winkpremBtn');
+  const winkpremPage = document.getElementById('winkpremPage');
+  const backWinkprem = document.getElementById('backWinkprem');
+  if(winkpremBtn && winkpremPage) winkpremBtn.addEventListener('click', ()=> show(winkpremPage,'WINK@ PREMIUM'));
+  if(backWinkprem && winkpremPage) backWinkprem.addEventListener('click', ()=> back(winkpremPage));
+
+  // PROCREATE PREMIUM
+  const procreateBtn = document.getElementById('procreateBtn');
+  const procreatedPage = document.getElementById('procreatedPage');
+  const backProcreate = document.getElementById('backProcreate');
+  if(procreateBtn && procreatedPage) procreateBtn.addEventListener('click', ()=> show(procreatedPage,'PROCREATE PREMIUM'));
+  if(backProcreate && procreatedPage) backProcreate.addEventListener('click', ()=> back(procreatedPage));
+
+  // APLIKASI AI@
+  const aplikasiaiBtn = document.getElementById('aplikasiaiBtn');
+  const aplikasiaiPage = document.getElementById('aplikasiaiPage');
+  const backAplikasiai = document.getElementById('backAplikasiai');
+  if(aplikasiaiBtn && aplikasiaiPage) aplikasiaiBtn.addEventListener('click', ()=> show(aplikasiaiPage,'APLIKASI AI PREMIUM'));
+  if(backAplikasiai && aplikasiaiPage) backAplikasiai.addEventListener('click', ()=> back(aplikasiaiPage));
+
+  // MS365@
+  const ms365Btn = document.getElementById('ms365Btn');
+  const ms365Page = document.getElementById('ms365Page');
+  const backMs365 = document.getElementById('backMs365');
+  if(ms365Btn && ms365Page) ms365Btn.addEventListener('click', ()=> show(ms365Page,'MICROSOFT 365'));
+  if(backMs365 && ms365Page) backMs365.addEventListener('click', ()=> back(ms365Page));
+
+  // EDUCATION PREMIUM
+  const educationBtn = document.getElementById('educationBtn');
+  const educationPage = document.getElementById('educationPage');
+  const backEducation = document.getElementById('backEducation');
+  if(educationBtn && educationPage) educationBtn.addEventListener('click', ()=> show(educationPage,'EDUCATION PREMIUM'));
+  if(backEducation && educationPage) backEducation.addEventListener('click', ()=> back(educationPage));
+
+  // FIGMA PREMIUM
+  const figmaBtn = document.getElementById('figmaBtn');
+  const figmaPage = document.getElementById('figmaPage');
+  const backFigma = document.getElementById('backFigma');
+  if(figmaBtn && figmaPage) figmaBtn.addEventListener('click', ()=> show(figmaPage,'FIGMA PREMIUM'));
+  if(backFigma && figmaPage) backFigma.addEventListener('click', ()=> back(figmaPage));
+
+  // LIGHTROOM PREMIUM
+  const lightroomBtn = document.getElementById('lightroomBtn');
+  const lightroomPage = document.getElementById('lightroomPage');
+  const backLightroom = document.getElementById('backLightroom');
+  if(lightroomBtn && lightroomPage) lightroomBtn.addEventListener('click', ()=> show(lightroomPage,'LIGHTROOM PREMIUM'));
+  if(backLightroom && lightroomPage) backLightroom.addEventListener('click', ()=> back(lightroomPage));
+}
+
+// ====== BIND COPY & ORDER BUTTONS ======
+function bindCopyAndOrder(){
+  // Copy Format
+  const copyBtns = document.querySelectorAll('.copyBtn');
+  copyBtns.forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const id  = btn.getAttribute('data-copy');
+      const txt = getTemplateText(id);
+      if(!txt){
+        showToast('Template tidak ditemukan');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(txt);
+        showToast('Format disalin ke clipboard');
+      } catch(e){
+        showToast('Gagal menyalin');
+      }
+    });
+  });
+
+  // Order via WhatsApp
+  const orderBtns = document.querySelectorAll('.orderBtn');
+  orderBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.getAttribute('data-order');
+      console.log('Order button clicked, templateId:', id);
+      try {
+        orderViaWA(id);
+      } catch(e) {
+        console.error('Order error:', e);
+        showToast('Terjadi error saat order: ' + e.message);
+      }
+    });
+  });
+}
+
+// ====== BIND SEARCH ======
+function bindSearch(){
+  const searchInput = document.getElementById('searchInput');
+  const serviceGrid = document.getElementById('serviceGrid');
+  if (searchInput && serviceGrid){
+    const cards = Array.from(serviceGrid.children);
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.trim().toLowerCase();
+      cards.forEach(card => {
+        const name = card.innerText.trim().toLowerCase();
+        card.style.display = name.includes(q) ? '' : 'none';
+      });
+    });
+  }
+}
+
+// ====== INIT ======
+function initApp(){
+  bindNavigationButtons();
+  bindCopyAndOrder();
+  bindSearch();
+  setWALink();
+}
+
+// Jalankan saat DOM siap
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
+</script>
+
+</body>
+</html>
